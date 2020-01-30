@@ -19,6 +19,10 @@ void bfs (int i, int p, int h) {
 int main () {
     cin >> n;
 
+    if (n == 1) {
+        cout << 0;
+        return 0;
+    }
     adj.resize(n);
     v.resize(n);
     
@@ -35,22 +39,24 @@ int main () {
     adk = adj;
     queue<ll> q;
 
+    unordered_set<ll> visited;
     for (int i = 0; i < n; i++) {
         if (adj[i].size() == 1) {
             q.push(i);
             q.push(0);
+            visited.insert(i);
         }
     }
 
     int d = -1;
     vector<ll> centers;
-    unordered_set<ll> visited;
 
     while (q.size() > 0) {
         int i = q.front();
         q.pop();
         int h = q.front();
         q.pop();
+
         if (h > d) {
             centers.clear();
             d = h;
@@ -74,7 +80,6 @@ int main () {
     else {
         bfs(centers[0], centers[1], d+1);
         bfs(centers[1], centers[0], d+1);
-        cout << d << "\n";
     }
     for (auto& x : v) cout << x << " ";
 }
