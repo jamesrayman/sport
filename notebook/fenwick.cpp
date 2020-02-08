@@ -5,9 +5,8 @@ struct Fenwick {
     int n;
     vector<int> t;
 
-    Fenwick (int sz = 2e5) {
-        n = sz;
-        t.resize(sz);
+    Fenwick (int n = 2e5) : n(n) {
+        t.resize(n);
     }
  
     void update (int i, int delta) {
