@@ -39,3 +39,6 @@
 # Input/Output
 *.in
 *.out
+
+# Other
+useless.cpp
