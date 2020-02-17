@@ -1,23 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Fenwick {
-    int n;
-    vector<int> t;
+using ll = long long;
 
-    Fenwick (int n = 2e5) : n(n) {
+struct Fenwick {
+    ll n;
+    vector<ll> t;
+
+    Fenwick (ll n = 2e5) : n(n) {
         t.resize(n);
     }
  
-    void update (int i, int delta) {
+    void update (ll i, ll delta) {
         while (i < n) {
             t[i] += delta;
             i += i&-i;
         }
     }
  
-    int query (int i) {
-        int r = 0;
+    ll query (ll i) {
+        ll r = 0;
         while (i > 0) {
             r += t[i];
             i -= i&-i;
