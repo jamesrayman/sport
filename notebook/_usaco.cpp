@@ -1,10 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void initio (string file) {
-    freopen((file + ".in").c_str(), "r", stdin);
-    freopen((file + ".out").c_str(), "w", stdout);
-}
+using ll = long long;
 
 template<typename T, typename U>
 ostream& operator << (ostream& out, pair<T, U> p) {
@@ -42,4 +39,8 @@ template<typename T, typename... Ts>
 void println (T t, Ts... ts) {
     cerr << t << " ";
     println(ts...);
+}
+
+int main () {
+
 }
