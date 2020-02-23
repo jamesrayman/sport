@@ -5,6 +5,8 @@ using ll = long long;
 using pll = pair<ll, ll>;
 using ld = long double;
 
+// END TEMPLATE
+
 int main () {
     
 }
