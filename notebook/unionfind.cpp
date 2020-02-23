@@ -1,13 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
+
 struct UnionFind {
     struct Element {
-        int id;
-        int p;
-        int rank;
+        ll id;
+        ll p;
+        ll rank;
 
-        Element (int i) {
+        Element (ll i) {
             id = p = i;
         }
     };
@@ -18,20 +20,20 @@ struct UnionFind {
         y.p = x.id;
     }
 
-    void makeSets (int n) {
-        for (int i = 0; i < n; i++)
+    void makeSets (ll n) {
+        for (ll i = 0; i < n; i++)
             v.push_back(Element(i));
     }
-    int find (int x) {
+    ll find (ll x) {
         if (v[x].p != x) {
             v[x].p = find(v[x].p);
         }
         return v[x].p;
     }
-    Element& at (int x) {
+    Element& at (ll x) {
         return v[find(x)];
     }
-    void join (int x, int y) {
+    void join (ll x, ll y) {
         x = find(x);
         y = find(y);
  
@@ -45,7 +47,7 @@ struct UnionFind {
         
         combine(v[x], v[y]);
     }
-    bool joined (int x, int y) {
+    bool joined (ll x, ll y) {
         return find(x) == find(y);
     }
 };
