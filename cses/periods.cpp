@@ -18,17 +18,11 @@ vector<ll> prefix (const string& s) {
 }
 
 int main () {
-    string t;
-    cin >> t;
+    string s;
+    cin >> s;
+    auto v = prefix(s);
 
-    auto p = prefix(t);
-
-    ll j = p.back();
-    set<ll> v;
-
-    while (j > 0) {
-        v.insert(j);
-        j = p[j];
+    for (int j = s.size(); j > 0; j = v[j]) {
+        cout << s.size() - v[j] << " ";
     }
-    for (auto x : v) cout << x << " ";
 }
