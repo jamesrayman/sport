@@ -82,3 +82,35 @@ struct SegTree {
         update(1, 0, n-1, i, j, x);
     }
 };
+
+ll n;
+vector<ll> v;
+SegTree<ll> t;
+
+int main () {
+    ll times;
+
+    cin >> times;
+    while (times-->0) {
+        ll q;
+        cin >> n >> q;
+        v.assign(n, 0);
+
+        t.build(v);
+
+        while (q-->0) {
+            ll c, i, j, x;
+            cin >> c >> i >> j;
+            i--;
+            j--;
+
+            if (c) {
+                cout << t.query(i, j) << "\n";
+            }
+            else {
+                cin >> x;
+                t.update(i, j, x);
+            }
+        }
+    }
+}
