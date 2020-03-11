@@ -7,7 +7,7 @@ struct UnionFind {
     struct Element {
         ll id;
         ll p;
-        ll rank;
+        ll rank = 0;
 
         Element (ll i) {
             id = p = i;

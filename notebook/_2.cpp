@@ -9,4 +9,5 @@ using ld = long double;
 
 int main () {
     
+    return 0;
 }

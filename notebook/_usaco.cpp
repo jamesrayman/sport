@@ -3,11 +3,14 @@ using namespace std;
 
 using ll = long long;
 
-void initio (string file) {
+void initio (string file = "") {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    freopen((file + ".in").c_str(), "r", stdin);
-    freopen((file + ".out").c_str(), "w", stdout);
+
+    if (file != "") {
+        freopen((file + ".in").c_str(), "r", stdin);
+        freopen((file + ".out").c_str(), "w", stdout);
+    }
 }
 
 template<typename T, typename U>
@@ -49,5 +52,7 @@ void println (T t, Ts... ts) {
 }
 
 int main () {
+    initio("");
 
+    return 0;
 }

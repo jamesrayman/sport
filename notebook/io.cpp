@@ -1,9 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void initio (string file) {
-    freopen((file + ".in").c_str(), "r", stdin);
-    freopen((file + ".out").c_str(), "w", stdout);
+void initio (string file = "") {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    if (file != "") {
+        freopen((file + ".in").c_str(), "r", stdin);
+        freopen((file + ".out").c_str(), "w", stdout);
+    }
 }
 
 template<typename T, typename U>
