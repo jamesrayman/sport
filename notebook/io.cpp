@@ -12,12 +12,12 @@ void initio (string file = "") {
 }
 
 template<typename T, typename U>
-ostream& operator << (ostream& out, pair<T, U> p) {
+ostream& operator << (ostream& out, const pair<T, U>& p) {
     return out << "(" << p.first << " " << p.second << ")";
 }
 
 template<typename T>
-ostream& prints (ostream& out, T v) {
+ostream& prints (ostream& out, const T& v) {
     out << "[";
     for (auto it = v.begin(); it != v.end(); ++it) {
         out << " " << *it;
@@ -26,8 +26,8 @@ ostream& prints (ostream& out, T v) {
 
     return out;
 }
-#define PRINTS(C) template<typename T> ostream& operator << (ostream& out, C<T> v) { return prints(out, v); } 
-#define PRINTS2(C) template<typename T, typename U> ostream& operator << (ostream& out, C<T, U> v) { return prints(out, v); } 
+#define PRINTS(C) template<typename T> ostream& operator << (ostream& out, const C<T>& v) { return prints(out, v); } 
+#define PRINTS2(C) template<typename T, typename U> ostream& operator << (ostream& out, const C<T, U>& v) { return prints(out, v); } 
 PRINTS(vector)
 PRINTS(list)
 PRINTS(deque)
@@ -44,7 +44,7 @@ void println () {
     cerr << "\n";
 }
 template<typename T, typename... Ts>
-void println (T t, Ts... ts) {
+void println (const T& t, Ts... ts) {
     cerr << t << " ";
     println(ts...);
 }
