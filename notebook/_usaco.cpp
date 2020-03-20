@@ -2,6 +2,8 @@
 using namespace std;
 
 using ll = long long;
+using pll = pair<ll, ll>;
+using ld = long double;
 
 void initio (string file = "") {
     ios_base::sync_with_stdio(0);

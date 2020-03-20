@@ -15,7 +15,9 @@ vector<ll> dijk (const vector<vector<pll>>& adj, ll source) {
         ll i = q.begin()->second;
         q.erase(q.begin());
         
-        for (auto [j, w] : adj[i]) {
+        for (auto& p : adj[i]) {
+            auto j = p.first, w = p.second;
+
             if (d[i] + w < d[j]) {
                 q.erase({ d[j], j });
                 d[j] = d[i] + w;
