@@ -3,16 +3,6 @@ using namespace std;
 
 using ll = long long;
 
-void initio (string file = "") {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-
-    if (file != "") {
-        freopen((file + ".in").c_str(), "r", stdin);
-        freopen((file + ".out").c_str(), "w", stdout);
-    }
-}
-
 template<typename T>
 struct MergeSortTree {
     ll n;
@@ -56,46 +46,3 @@ struct MergeSortTree {
         return query(1, 0, n-1, i, j, x);
     }
 };
-
-ll n;
-vector<ll> v, u;
-vector<vector<ll>> adj;
-vector<pair<ll, ll>> r;
-MergeSortTree<ll> t;
-
-void go (ll i) {
-    u.push_back(-v[i]);
-    r[i].first = u.size();
-
-    for (auto j : adj[i]) {
-        go(j);
-    } 
-
-    r[i].second = u.size()-1;
-}
-
-int main () {
-    initio("promote");
-    cin >> n;
-
-    v.resize(n);
-    r.resize(n);
-    adj.resize(n);
-    for (auto& x : v) cin >> x;
-
-    for (int i = 1; i < n; i++) {
-        ll a;
-        cin >> a;
-        a--;
-
-        adj[a].push_back(i);
-    }
-
-    go(0);
-    t.build(u);
-
-    for (int i = 0; i < n; i++) {
-        cout << t.query(r[i].first, r[i].second, -v[i]) << "\n";
-    }
-    return 0;
-}
