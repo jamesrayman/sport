@@ -40,10 +40,9 @@ vector<ll> shifts (const string& s) {
     return p;
 }
 
-vector<ll> lcp (const string& s) {
+vector<ll> lcp (const string& s, const vector<ll>& p) {
     ll n = s.size(), k = 0;
-    vector<ll> p = shifts(s), rank (n);
-    vector<ll> v (n-1);
+    vector<ll> rank (n), v (n-1);
 
     for (int i = 0; i < n; i++) rank[p[i]] = i;
 
