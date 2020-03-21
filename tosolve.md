@@ -6,7 +6,6 @@
 
 # Sphere
 
-* BEADS
 * PT07J
 * BRCKTS
 * GSS1
