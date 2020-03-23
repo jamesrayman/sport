@@ -8,6 +8,7 @@ struct SegTree {
     ll n;
     vector<T> t, lazy;
     T noval = 0;
+    T nolazy = 0;
 
     T f (T a, T b) {
         return a + b;
@@ -19,7 +20,7 @@ struct SegTree {
     void unlazy (ll p, ll lo, ll hi) {
         lazy[2*p] += lazy[p];
         lazy[2*p+1] += lazy[p];
-        lazy[p] = 0;
+        lazy[p] = nolazy;
 
         combine(p, lo, hi);
     }
@@ -45,7 +46,7 @@ struct SegTree {
         n = v.size();
 
         t.assign(4*n, noval);
-        lazy.assign(4*n, noval);
+        lazy.assign(4*n, nolazy);
         build(v, 1, 0, n-1);
     }
 
