@@ -2,9 +2,8 @@
 using namespace std;
 
 using ll = long long;
-const ll mod = 1e9+7;
-const ll N = 5e4+1, K = 20;
-using Matrix = ll [K][K];
+using pll = pair<int, int>;
+ll mod = 1e9+7;
 
 void initio (string file = "") {
     ios_base::sync_with_stdio(0);
@@ -16,118 +15,201 @@ void initio (string file = "") {
     }
 }
 
-void mul (Matrix res, Matrix lhs, Matrix rhs) {
-    for (int i = 0; i < K; i++) {
-        for (int j = i; j < K; j++) {
-            for (int k = i; k <= j; k++) {
-                res[i][j] += lhs[i][k] * rhs[k][j];
-                res[i][j] %= mod;
-            }
-            res[i][j] += lhs[i][j] + rhs[i][j];
-            res[i][j] %= mod;
+struct Seg {
+    ll n;
+    int t [20];
+
+    ll f (ll a, ll b) {
+        int r = a + b;
+        if (r >= mod) r -= mod;
+        return r;
+    }
+
+   void build (ll k) {
+        n = k;
+
+        for (int i = 0; i < 20; i++) t[i] = 0;
+    }
+
+    ll query (ll i, ll j) {
+        ll r = 0;
+        for (; i <= j; i++) {
+            r = f(r, t[i]);
+        } 
+        return r;
+    }
+
+    void update (ll i, ll x) {
+        t[i] += x;
+        if (t[i] >= mod) t[i] -= mod;
+    }
+};
+template<typename T>
+struct SegTree {
+    ll n;
+    vector<T> t;
+    T noval = 0;
+
+    T f (T a, T b) {
+        return (a + b) % mod;
+    }
+
+    void combine (ll p) {
+        t[p] = f(t[2*p], t[2*p+1]);
+    }
+
+    void build (const vector<T>& v, ll p, ll lo, ll hi) {
+        if (lo == hi) {
+            t[p] = v[lo];
+            return;
         }
-    }
-}
+        
+        ll mid = (lo + hi)/2;
+        build(v, 2*p, lo, mid);
+        build(v, 2*p+1, mid+1, hi);
 
-void singleton (int x, Matrix res) {
-    for (int i = x; i < K; i++) {
-        res[x][i] = 1;
+        combine(p);
     }
-    for (int i = 0; i < K; i++) {
-        res[i][i]++;
+    void build (ll k) {
+        n = k;
+
+        t.assign(4*n, noval);
     }
-    for (int i = 0; i < K; i++) {
-        for (int j = 0; j < K; j++) {
-            cerr << res[i][j] << " ";
+
+    T query (ll p, ll lo, ll hi, ll i, ll j) {
+        if (hi < i || j < lo) return noval;
+        if (i <= lo && hi <= j) return t[p];
+
+        ll mid = (lo + hi)/2;
+        return f(query(2*p, lo, mid, i, j),
+                 query(2*p+1, mid+1, hi, i, j));
+    }
+    T query (ll i, ll j) {
+        return query(1, 0, n-1, i, j);
+    }
+
+    void update (ll p, ll lo, ll hi, ll i, T x) {
+        if (hi < i || i < lo) return;
+        if (lo == hi) {
+            t[p] += x;
+            t[p] %= mod;
+            return;
         }
-        cerr << "\n";
-    }
-    cerr << "\n";
-}
 
-Matrix v [N];
-
-struct Fenwick {
-    int n, k;
-
-    Fenwick (int n, int k) {
-        this->n = n;
-        this->k = k;
+        ll mid = (lo + hi)/2;
+        update(2*p, lo, mid, i, x);
+        update(2*p+1, mid+1, hi, i, x);
+        combine(p);
     }
 
-    void update (int i, Matrix m) {
-        while (i < N) {
-            Matrix r = {}; 
-
-            mul(r, v[i], m);
-
-            for (int a = 0; a < K; a++) {
-                for (int b = i; b < K; b++) {
-                    v[i][a][b] = r[a][b];
-                }
-            }
-            i += i&-i;
-        }
-    }
-
-    void query (int i, Matrix res) {
-        while (i > 0) {
-            Matrix r = {};
-
-            mul(r, res, v[i]);
-
-            for (int a = 0; a < K; a++) {
-                for (int b = i; b < K; b++) {
-                    res[a][b] = r[a][b];
-                }
-            }
-            i -= i&-i;
-        }
+    void update (ll i, T x) {
+        update(1, 0, n-1, i, x);
     }
 };
 
+ll n, k;
+vector<int> v;
+vector<ll> ans;
+
+vector<pair<int, pll>> qs;
+
+void solve (ll lo, ll hi, const vector<int>& is) {
+    if (is.size() == 0) return;
+    if (lo == hi) {
+        for (auto& ii : is) {
+            ans[qs[ii].first] = 2;
+        }
+        return;
+    }
+    ll mid = (lo+hi) / 2;
+    vector<int> loq, hiq;
+    // cerr << "[ " << lo << ", " << mid << ", " << hi << " ]" << qs.size() << "\n";
+
+    for (auto& ii : is) {
+        auto& q = qs[ii];
+        if (q.second.second <= mid) {
+            loq.push_back(ii);
+            continue;
+        }
+        if (q.second.first > mid) {
+            hiq.push_back(ii);
+            continue;
+        }
+    }
+
+    solve(lo, mid, loq);
+    solve(mid+1, hi, hiq);
+
+    if (loq.size() + hiq.size() == is.size()) return;
+
+    vector<vector<ll>> la (k, vector<ll>(hi-lo+1, 0)), ha = la;
+
+    Seg t;
+
+    for (int j = 0; j < k; j++) {
+        t.build(k);
+        for (int i = mid; i >= lo; i--) {
+            t.update(v[i], (j >= v[i]) + t.query(v[i], k-1));
+            la[j][i-lo] = 1+t.query(0, k-1);
+        }
+    }
+
+    for (int j = 0; j < k; j++) {
+        t.build(k);
+        for (int i = mid+1; i <= hi; i++) {
+            t.update(v[i], (j == v[i]) + t.query(0, v[i]));
+            ha[j][i-lo] = t.query(0, k-1);
+        }
+    }
+
+    for (auto& ii : is) {
+        auto& q = qs[ii];
+        if (q.second.second <= mid) {
+            continue;
+        }
+        if (q.second.first > mid) {
+            continue;
+        }
+        // cerr << q.second.first << " " << q.second.second << "\n";
+
+        auto& ansi = ans[q.first];
+
+        for (int i = 0; i < k; i++) {
+            ansi += la[i][q.second.first-lo] * ha[i][q.second.second-lo];
+            // cerr << la[i][q.second.first-lo] << " " << ha[i][q.second.second-lo] << " " << la[k-1][q.second.first-lo] << "\n";
+            ansi %= mod;
+        }
+        ansi += la[k-1][q.second.first-lo];
+        ansi %= mod;
+        // cerr << ans[q.first] << " " << q.first << "\n";
+    }
+}
+
 int main() {
     initio("nondec");
-    ll n, k, q;
+    ll q;
 
     cin >> n >> k;
+    v.resize(n);
 
-    vector<vector<pair<ll, ll>>> qs (n);
-    vector<int> v (n);
-
-    for (auto& x : v) cin >> x;
+    for (auto& x : v) {
+        cin >> x;
+        x--;
+    }
 
     cin >> q;
-    vector<ll> ans (q);
-
-    Fenwick f (n+10, k);
+    ans.resize(q);
+    vector<int> is;
 
     for (int i = 0; i < q; i++) {
         int a, b;
         cin >> a >> b;
 
-        qs[b-1].push_back({ a-1, i });
+        qs.push_back({ i, { a-1, b-1 } });
+        is.push_back(i);
     }
 
-    for (int i = 0; i < n; i++) {
-        Matrix sn = {};
-
-        singleton(v[i]-1, sn);
-        f.update(n-i, sn);
-
-        for (auto& p : qs[i]) {
-            Matrix res = {};
-
-            f.query(n-p.first, res);
-            ll s = 1;
-
-            for (int j = 0; j < k; j++) {
-                s += res[j][k-1];
-            }
-
-            ans[p.second] = s % mod;
-        }
-    }
+    solve(0, n-1, is);
 
     for (auto& x : ans)
         cout << x << "\n";
