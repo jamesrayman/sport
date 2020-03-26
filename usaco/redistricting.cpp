@@ -85,6 +85,9 @@ struct SegTree {
         t.assign(4*n, noval);
         build(v, 1, 0, n-1);
     }
+    void build (ll n, T val = T()) {
+        build (vector<T>(n, val));
+    }
 
     T query (ll p, ll lo, ll hi, ll i, ll j) {
         if (hi < i || j < lo) return noval;
@@ -134,7 +137,7 @@ int main () {
     m = 1+*max_element(v.begin(), v.end());
 
     SegTree<ll> t;
-    t.build(vector<ll>(m, 2e9)); // v value -> cost
+    t.build(m, 2e9); // v value -> cost
 
     vector<ll> d (n+1);
     vector<set<pll>> st (m, { { 2e9, -1 } }); // v value -> cost (d value), i value

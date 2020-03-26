@@ -49,6 +49,9 @@ struct SegTree {
         lazy.assign(4*n, nolazy);
         build(v, 1, 0, n-1);
     }
+    void build (ll n, T val = T()) {
+        build (vector<T>(n, val));
+    }
 
     T query (ll p, ll lo, ll hi, ll i, ll j) {
         if (hi < i || j < lo) return noval;
