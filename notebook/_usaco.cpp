@@ -32,17 +32,8 @@ ostream& prints (ostream& out, const T& v) {
 }
 #define PRINTS(C) template<typename T> ostream& operator << (ostream& out, const C<T>& v) { return prints(out, v); } 
 #define PRINTS2(C) template<typename T, typename U> ostream& operator << (ostream& out, const C<T, U>& v) { return prints(out, v); } 
-PRINTS(vector)
-PRINTS(list)
-PRINTS(deque)
-PRINTS(set)
-PRINTS(multiset)
-PRINTS(unordered_set)
-PRINTS(unordered_multiset)
-PRINTS2(map)
-PRINTS2(multimap)
-PRINTS2(unordered_map)
-PRINTS2(unordered_multimap)
+PRINTS(vector) PRINTS(list) PRINTS(deque) PRINTS(set) PRINTS(multiset) PRINTS(unordered_set) PRINTS(unordered_multiset)
+PRINTS2(map) PRINTS2(multimap) PRINTS2(unordered_map) PRINTS2(unordered_multimap)
 
 void println () {
     cerr << "\n";
