@@ -1,28 +1,16 @@
-#include <bits/stdc++.h>
+#import <bits/stdc++.h>
 using namespace std;
 
-using ll = long long;
+int v['   '], i, j, n;
+string s;
 
-vector<ll> prefix (const string& s) {
-    ll j = -1;
-    vector<ll> p (s.size()+1);
-    p[0] = -1;
-
-    for (ll i = 0; i < s.size(); i++) {
-        while (j > -1 && s[i] != s[j]) j = p[j];
-        j++;
-        p[i+1] = j;
-    }
-
-    return p;
-}
-
-int main () {
-    string s;
+main () {
     cin >> s;
-    auto v = prefix(s);
+    n = s.size();
 
-    for (int j = s.size(); j > 0; j = v[j]) {
-        cout << s.size() - v[j] << " ";
-    }
+    for (*v = --j; i < n; v[++i] = ++j)
+        for (; j + 1 && s[i] ^ s[j];) j = v[j];
+
+    for (; i = v[i], 1+i;) 
+        cout << n - i << " ";
 }
